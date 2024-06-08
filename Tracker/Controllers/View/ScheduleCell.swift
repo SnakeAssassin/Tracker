@@ -4,7 +4,7 @@ protocol SwitcherProtocolDelegate: AnyObject {
     func receiveSwitcherValue(isSelected: Bool, indexPath: IndexPath)
 }
 
-class ScheduleCell: UITableViewCell {
+final class ScheduleCell: UITableViewCell {
     
     weak var delegate: SwitcherProtocolDelegate?
     private var isSwitchSelected = false

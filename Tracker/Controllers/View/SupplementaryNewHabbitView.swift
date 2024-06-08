@@ -1,7 +1,7 @@
 import UIKit
 
 // Хедер и футер для Collect View
-class SupplementaryNewHabbitView: UICollectionReusableView {
+final class SupplementaryNewHabbitView: UICollectionReusableView {
     let titleLabel = UILabel()
     
     override init(frame: CGRect) {

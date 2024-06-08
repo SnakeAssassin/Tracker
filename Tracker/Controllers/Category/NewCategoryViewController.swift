@@ -81,8 +81,6 @@ final class NewCategoryViewController: UIViewController {
         delegate?.addNewCategory(categoryName: newCategory)
         self.dismiss(animated: true, completion: nil)
     }
-    
-    
 }
 
 // MARK: - UITextFieldDelegate

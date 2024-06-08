@@ -1,42 +1,57 @@
 import CoreData
 import UIKit
 
-
 final class TrackerStore: NSObject {
-// хранит объект контекста Core Data.
+    
+    // MARK: Properties
+    // Хранит объект контекста Core Data.
     private let context: NSManagedObjectContext
-    private var fetchedResultsController: NSFetchedResultsController<TrackerCoreData>!
+    // Вспомогательный объект для работы с цветами
     private let uiColorMarshalling = UIColorMarshalling()
     
-// Удобный нициализатор, который позволяет создавать экземпляры TrackerStore без явного передачи контекста. Внутри этого инициализатора контекст Core Data извлекается из общего делегата приложения и передается в основной инициализатор init(context: NSManagedObjectContext).
+    // MARK: Initialization
+    // Удобный инициализатор
     convenience override init() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            try! self.init(context: nil)
+            return
+        }
         let context = appDelegate.persistentContainer.viewContext
         try! self.init(context: context)
     }
     
-// Основной инициализатор, который принимает контекст Core Data в качестве параметра и сохраняет его в свойстве context.
-    init(context: NSManagedObjectContext) throws {
-        self.context = context
+    // Основной инициализатор
+    init(context: NSManagedObjectContext?) throws {
+        // Если контекст не передан (nil), создаем новый контекст Core Data.
+        if let context = context {
+            self.context = context
+        } else {
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+                fatalError("Failed to obtain AppDelegate")
+            }
+            self.context = appDelegate.persistentContainer.viewContext
+        }
         super.init()
     }
     
+    // MARK: Public Methods
+    // Метод для добавления нового трекера с указанием категории.
     func addNewTracker(_ tracker: Tracker, with category: TrackerCategory) throws {
         let trackerCoreData = TrackerCoreData(context: context)
         updateExistingTrackers(trackerCoreData, with: tracker)
         
         if let existingCategory = try fetchCategory(with: category.title) {
-            existingCategory.addToTracker(trackerCoreData)
+            existingCategory.addToTrackers(trackerCoreData)
         } else {
             let newCategory = TrackerCategoryCoreData(context: context)
             newCategory.title = category.title
-            newCategory.addToTracker(trackerCoreData)
+            newCategory.addToTrackers(trackerCoreData)
         }
         try context.save()
     }
-
+    
+    // Метод для обновления свойств существующего объекта трекера.
     func updateExistingTrackers(_ trackerCoreData: TrackerCoreData, with tracker: Tracker) {
-        //guard let (colorString, _) = colorDictionary.first(where: { $0.value == tracker.color }) else { return }
         trackerCoreData.id = tracker.id
         trackerCoreData.name = tracker.name
         trackerCoreData.color = uiColorMarshalling.hexString(from: tracker.color)
@@ -45,6 +60,7 @@ final class TrackerStore: NSObject {
         trackerCoreData.eventDate = tracker.eventDate
     }
     
+    // Метод для извлечения категории по ее названию.
     func fetchCategory(with title: String) throws -> TrackerCategoryCoreData? {
         let fetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "title == %@", title)
@@ -55,5 +71,14 @@ final class TrackerStore: NSObject {
         } catch {
             throw error
         }
+    }
+    
+    // Удаление Tracker из Core Data
+    func deleteTrackersFromCoreData() throws { // TODO: - delete in Sprint 16
+        print(#fileID, #function)
+        let request = TrackerCoreData.fetchRequest()
+        let trackers = try? context.fetch(request)
+        trackers?.forEach { context.delete($0) }
+        try context.save()
     }
 }

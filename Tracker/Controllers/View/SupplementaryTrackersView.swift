@@ -1,7 +1,7 @@
 import UIKit
 
 // Хедер и футер для Collect View
-class SupplementaryTrackersView: UICollectionReusableView {
+final class SupplementaryTrackersView: UICollectionReusableView {
     let titleLabel = UILabel()
     
     override init(frame: CGRect) {
@@ -14,9 +14,8 @@ class SupplementaryTrackersView: UICollectionReusableView {
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 28),
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 0),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0), // Минус, чтобы создать нижний отступ
-            //titleLabel.widthAnchor.constraint(equalToConstant: 100), // Устанавливаем фиксированную ширину
-            titleLabel.heightAnchor.constraint(equalToConstant: 46) // Устанавливаем фиксированную высоту
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
+            titleLabel.heightAnchor.constraint(equalToConstant: 46) 
         ])
 
     }
