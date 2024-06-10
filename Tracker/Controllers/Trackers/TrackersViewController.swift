@@ -89,6 +89,14 @@ final class TrackersViewController: UIViewController, UISearchBarDelegate {
         image.widthAnchor.constraint(equalToConstant: 80).isActive = true
         return image
     }()
+    private lazy var stubTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Что будем отслеживать?"
+        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        label.textColor = .ypBlack
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
     // MARK: Actions
     @objc func didAddButton() {
@@ -117,16 +125,17 @@ final class TrackersViewController: UIViewController, UISearchBarDelegate {
     // MARK: Private Methods
     private func showStub() {
         stubTrackersView.isHidden = visibleCategories.isEmpty == false ? true : false
+        stubTitleLabel.isHidden = visibleCategories.isEmpty == false ? true : false
     }
     
     private func showVisibleTrackers() {
         let calendar = Calendar(identifier: .iso8601)
-        print(calendar)
         let components = calendar.dateComponents([.weekday], from: selectedDate)
         if let categories = categories, let weekdayNumber = components.weekday {
+            let adjustedWeekdayNumber = (weekdayNumber == 1) ? 7 : weekdayNumber - 1
             visibleCategories = categories.compactMap { category in
                 let trackers = category.trackers.filter { tracker in
-                    let dateCondition = tracker.schedule.contains { weekDay in weekDay.numberValue == weekdayNumber } == true
+                    let dateCondition = tracker.schedule.contains { weekDay in weekDay.numberValue == adjustedWeekdayNumber } == true
                     return dateCondition
                 }
                 if trackers.isEmpty { return nil }
@@ -181,9 +190,6 @@ extension TrackersViewController: UICollectionViewDataSource {
         cell.delegate = self
         let tracker = visibleCategories[indexPath.section].trackers[indexPath.row]
         let isCompletedToday = isCompletedToday(id: tracker.id)
-        print("isCompletedToday")
-        print(isCompletedToday)
-        //let completedDays = completedTrackers.filter { $0.id == tracker.id }.count
         let completedDays = try? trackerRecordStore.fetchDays(for: tracker.id).count
         
         cell.configCell(with: tracker,
@@ -340,6 +346,12 @@ extension TrackersViewController {
         NSLayoutConstraint.activate([
             stubTrackersView.centerXAnchor.constraint(equalTo: guide.centerXAnchor),
             stubTrackersView.centerYAnchor.constraint(equalTo: guide.centerYAnchor)
+        ])
+        
+        view.addSubview(stubTitleLabel)
+        NSLayoutConstraint.activate([
+            stubTitleLabel.centerXAnchor.constraint(equalTo: guide.centerXAnchor),
+            stubTitleLabel.topAnchor.constraint(equalTo: stubTrackersView.bottomAnchor, constant: 8)
         ])
     }
 }

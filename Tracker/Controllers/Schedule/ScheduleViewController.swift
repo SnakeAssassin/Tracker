@@ -85,11 +85,13 @@ extension ScheduleViewController: UITableViewDataSource {
         cell.delegate = self
         
         // Начальное положение свитчера
-        if let switchSelectedWeekdays = switchSelectedWeekdays,
-            switchSelectedWeekdays.contains(weekdays[indexPath.row]) {
+        if let switchSelectedWeekdays = switchSelectedWeekdays, switchSelectedWeekdays.contains(weekdays[indexPath.row]) {
             selectedDays.append(weekdays[indexPath.row].numberValue - 1)
             cell.scheduleSwitch.isOn = true
         }
+        
+
+        
         return cell
     }
 }
