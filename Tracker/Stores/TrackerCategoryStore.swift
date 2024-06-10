@@ -17,21 +17,29 @@ struct TrackerCategoryStoreUpdate {
 
 final class TrackerCategoryStore: NSObject {
     
-    // MARK: Properties
-    private let context: NSManagedObjectContext
+    // MARK: Public properties
+    weak var delegate: TrackerCategoryStoreDelegate?
+    
+    // MARK: Private properties
     // Контроллер для выполнения запросов и отслеживания изменений в данных Core Data
     private var fetchedResultsController: NSFetchedResultsController<TrackerCategoryCoreData>!
     private var insertedIndexes: IndexSet?
     private var deletedIndexes: IndexSet?
     private var updatedIndexes: IndexSet?
-    
     private let uiColorMarshalling = UIColorMarshalling()
-    weak var delegate: TrackerCategoryStoreDelegate?
+    private let context: NSManagedObjectContext
     
     // MARK: Initialization
     convenience override init() {
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        try! self.init(context: context)
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            fatalError("Unable to cast delegate to AppDelegate")
+        }
+        let context = appDelegate.persistentContainer.viewContext
+        do {
+            try self.init(context: context)
+        } catch {
+            fatalError("Unable to initialize object: \(error.localizedDescription)")
+        }
     }
     
     init(context: NSManagedObjectContext) throws {
@@ -122,19 +130,14 @@ extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
     
     // Уведомляет об изменениях в объектах. Можно обрабатывать вставки, удаления и модификации ячеек таблицы, используя методы insertRows(at:with:), deleteRows(at:with:) и так далее.
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        guard let indexPath = indexPath else { return }
         switch type {
         case .delete:
-            if let indexPath = indexPath {
-                deletedIndexes?.insert(indexPath.item)
-            }
+            deletedIndexes?.insert(indexPath.item)
         case .insert:
-            if let indexPath = newIndexPath {
-                insertedIndexes?.insert(indexPath.item)
-            }
+            insertedIndexes?.insert(indexPath.item)
         case.update:
-            if let indexPath = indexPath {
-                updatedIndexes?.insert(indexPath.item)
-            }
+            updatedIndexes?.insert(indexPath.item)
         default:
             break
         }

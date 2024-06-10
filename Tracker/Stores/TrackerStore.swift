@@ -13,24 +13,20 @@ final class TrackerStore: NSObject {
     // Удобный инициализатор
     convenience override init() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            try! self.init(context: nil)
-            return
+            fatalError("Unable to cast delegate to AppDelegate")
         }
         let context = appDelegate.persistentContainer.viewContext
-        try! self.init(context: context)
+        do {
+            try self.init(context: context)
+        } catch {
+            fatalError("Unable to initialize object: \(error.localizedDescription)")
+        }
     }
     
     // Основной инициализатор
-    init(context: NSManagedObjectContext?) throws {
+    init(context: NSManagedObjectContext) throws {
         // Если контекст не передан (nil), создаем новый контекст Core Data.
-        if let context = context {
-            self.context = context
-        } else {
-            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-                fatalError("Failed to obtain AppDelegate")
-            }
-            self.context = appDelegate.persistentContainer.viewContext
-        }
+        self.context = context
         super.init()
     }
     

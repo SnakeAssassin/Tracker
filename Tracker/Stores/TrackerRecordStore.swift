@@ -8,8 +8,15 @@ final class TrackerRecordStore: NSObject {
     
     // MARK: Initialization
     convenience override init() {
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        try! self.init(context: context)
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+                fatalError("Unable to cast delegate to AppDelegate")
+            }
+        let context = appDelegate.persistentContainer.viewContext
+        do {
+                try self.init(context: context)
+            } catch {
+                fatalError("Unable to initialize object: \(error.localizedDescription)")
+            }
     }
     
     init(context: NSManagedObjectContext) throws {
