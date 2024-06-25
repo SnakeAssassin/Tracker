@@ -14,8 +14,12 @@ extension SplashViewController {
             print("[SplashViewController/switchToTrackerController()]: Window Invalid Configuration")
             return
         }
-        let tabBarController = TabBarController()
+
+                
+        let tabBarController = MainViewController()
         window.rootViewController = tabBarController
+//        let tabBarController = TabBarController()
+//        window.rootViewController = tabBarController
     }
 }
 
