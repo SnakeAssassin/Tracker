@@ -164,7 +164,7 @@ final class NewTrackerViewController: UIViewController {
             name: textField.text ?? "",
             color: color,
             emoji: emoji,
-            schedule: schedule, 
+            schedule: schedule,
             eventDate: Date())
         let categoryTracker = TrackerCategory(
             title: title,

@@ -1,7 +1,7 @@
 import UIKit
 
 
-class CategoryCell: UITableViewCell {
+final class CategoryCell: UITableViewCell {
 
     private var indexPath: IndexPath?
     

@@ -2,7 +2,7 @@ import UIKit
 
 protocol TrackerCellDelegate: AnyObject{
     func completedTracker(id: UUID, indexPath: IndexPath)
-    func uncompletedTracker(id: UUID, indexPath: IndexPath)
+    //func uncompletedTracker(id: UUID, indexPath: IndexPath)
 }
 
 // Класс ячейки должен наследоваться от `UICollectionViewCell`.
@@ -81,11 +81,7 @@ final class TrackersCell: UICollectionViewCell {
     
     @objc private func switchValueChanged(_ sender: UIButton) {
         guard let trackerId = trackerId , let indexPath = indexPath else { return }
-        if isCompletedToday {
-            delegate?.uncompletedTracker(id: trackerId, indexPath: indexPath)
-        } else {
-            delegate?.completedTracker(id: trackerId, indexPath: indexPath)
-        }
+        delegate?.completedTracker(id: trackerId, indexPath: indexPath)
     }
     
     // Конструктор:

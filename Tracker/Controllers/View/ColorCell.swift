@@ -1,6 +1,6 @@
 import UIKit
 
-class ColorCell: UICollectionViewCell {
+final class ColorCell: UICollectionViewCell {
 
     let titleLabel = UILabel()
     let contentContainerView = UIView()

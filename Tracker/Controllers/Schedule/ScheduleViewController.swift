@@ -77,7 +77,7 @@ extension ScheduleViewController: UITableViewDataSource {
     
     // Ячейка
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ScheduleCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? ScheduleCell else { return  UITableViewCell() }
         cell.accessoryView = cell.scheduleSwitch
         cell.backgroundColor = .ypBackground
         cell.textLabel?.text = weekdays[indexPath.row].rawValue
@@ -85,11 +85,13 @@ extension ScheduleViewController: UITableViewDataSource {
         cell.delegate = self
         
         // Начальное положение свитчера
-        if let switchSelectedWeekdays = switchSelectedWeekdays,
-            switchSelectedWeekdays.contains(weekdays[indexPath.row]) {
+        if let switchSelectedWeekdays = switchSelectedWeekdays, switchSelectedWeekdays.contains(weekdays[indexPath.row]) {
             selectedDays.append(weekdays[indexPath.row].numberValue - 1)
             cell.scheduleSwitch.isOn = true
         }
+        
+
+        
         return cell
     }
 }
