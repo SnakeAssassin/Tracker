@@ -1,32 +1,7 @@
-import UIKit
-
-// MARK: - MainViewController
-class MainViewController: UIViewController {
-    
-    // MARK: Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        showOnboardingOrMainScreen()
-    }
-    
-    // MARK: Private methods
-    
-    private func showOnboardingOrMainScreen() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            print("[MainViewController/showOnboardingOrMainScreen()]: appDelegate Invalid Configuration")
-            return
-        }
-        let hasLaunchedBefore = UserDefaults.standard.bool(forKey: "hasLaunchedBefore")
-        if hasLaunchedBefore {
-            appDelegate.window?.rootViewController = TabBarController()
-        } else {
-            appDelegate.window?.rootViewController = OnboardingViewController()
-        }
-    }
-}
-
 // MARK: - OnboardingViewController
-class OnboardingViewController: UIPageViewController {
+
+import UIKit
+final class OnboardingViewController: UIPageViewController {
     
     // MARK: Public properties
     lazy var pages: [UIViewController] = {

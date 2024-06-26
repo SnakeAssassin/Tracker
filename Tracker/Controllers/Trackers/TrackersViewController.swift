@@ -7,7 +7,7 @@ final class TrackersViewController: UIViewController, UISearchBarDelegate {
     
     
     // MARK: Properties
-
+    var categoryList: [String] = []                             // Список категорий
     
     // MARK: Private properties
     private var categories: [TrackerCategory]?                  // Все категории и их трекеры
