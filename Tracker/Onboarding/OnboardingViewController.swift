@@ -1,21 +1,34 @@
 import UIKit
 
-// Используйте OnboardingViewController в вашем основном ViewController
+// MARK: - MainViewController
 class MainViewController: UIViewController {
+    
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let onboardingViewController = OnboardingViewController()
-        addChild(onboardingViewController)
-        view.addSubview(onboardingViewController.view)
-        onboardingViewController.didMove(toParent: self)
-
-        onboardingViewController.view.frame = view.bounds
+        showOnboardingOrMainScreen()
+    }
+    
+    // MARK: Private methods
+    
+    private func showOnboardingOrMainScreen() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            print("[MainViewController/showOnboardingOrMainScreen()]: appDelegate Invalid Configuration")
+            return
+        }
+        let hasLaunchedBefore = UserDefaults.standard.bool(forKey: "hasLaunchedBefore")
+        if hasLaunchedBefore {
+            appDelegate.window?.rootViewController = TabBarController()
+        } else {
+            appDelegate.window?.rootViewController = OnboardingViewController()
+        }
     }
 }
 
+// MARK: - OnboardingViewController
 class OnboardingViewController: UIPageViewController {
-
+    
+    // MARK: Public properties
     lazy var pages: [UIViewController] = {
         return [
             self.viewController(imageNamed: "onboard1", textLabel: "Отслеживайте только то, что хотите"),
@@ -23,16 +36,20 @@ class OnboardingViewController: UIPageViewController {
         ]
     }()
     
+    // MARK: Private properties
     private let pageControl = UIPageControl()
-
+    
+    // MARK: Initialization
     init() {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
     
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         dataSource = self
@@ -44,10 +61,17 @@ class OnboardingViewController: UIPageViewController {
         setupPageControl()
     }
     
+    // MARK: Actions
     @objc func onboardingButtonClicked() {
-        // Действие при нажатии на кнопку
+        guard let window = UIApplication.shared.windows.first else {
+            print("[OnboardingViewController/onboardingButtonClicked()]: Window Invalid Configuration")
+            return
+        }
+        let tabBarController = TabBarController()
+        window.rootViewController = tabBarController
     }
     
+    // MARK: Private methods
     private func setupPageControl() {
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = 0
@@ -76,7 +100,7 @@ class OnboardingViewController: UIPageViewController {
         textLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         textLabel.textColor = .black
         textLabel.translatesAutoresizingMaskIntoConstraints = false
-    
+        
         let button = UIButton()
         button.accessibilityIdentifier = "onboardingButton"
         button.backgroundColor = .black
@@ -128,7 +152,7 @@ extension OnboardingViewController: UIPageViewControllerDataSource {
         guard previousIndex >= 0 else { return nil }
         return pages[previousIndex]
     }
-
+    
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let viewControllerIndex = pages.firstIndex(of: viewController) else {
             return nil
