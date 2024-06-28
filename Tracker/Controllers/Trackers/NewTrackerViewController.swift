@@ -308,8 +308,9 @@ extension NewTrackerViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if indexPath.row == 0 {
-            let viewController = CategoryListViewController()
-            viewController.delegate = self
+            let viewModel = CategoryListViewModel()
+            viewModel.delegate = self
+            let viewController = CategoryListViewController(viewModel: viewModel)
             viewController.modalPresentationStyle = .formSheet
             present(viewController, animated: true, completion: nil)
         }

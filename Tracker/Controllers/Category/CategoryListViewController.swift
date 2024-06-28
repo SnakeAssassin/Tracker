@@ -1,26 +1,12 @@
 // MARK: Экран "Список категорий"
 import UIKit
 
-// MARK: - CategoryProtocolDelegate
-protocol CategoryProtocolDelegate: AnyObject {
-    func setCategory(category: String)
-    var categoryList: [String] { get set }
-}
-
 // MARK: - CategoryListViewController
 final class CategoryListViewController: UIViewController {
     
-    // MARK: Public Properties
-    weak var delegate: CategoryProtocolDelegate?
-    
     // MARK: Private Properties
-    private var categoryList: [String] {
-        get { return delegate?.categoryList ?? [] }
-        set { delegate?.categoryList = newValue }
-    }
+    private var viewModel: CategoryListViewModel
     private var tableViewHeightConstraint: NSLayoutConstraint!
-    private let cellHeight: CGFloat = 75
-    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Категория"
@@ -81,13 +67,17 @@ final class CategoryListViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    private let cellHeight: CGFloat = 75
     
-    // MARK: Actions
-    @objc func addCategoryButtonClicked() {
-        let viewController = NewCategoryViewController()
-        viewController.delegate = self
-        viewController.modalPresentationStyle = .formSheet
-        present(viewController, animated: true, completion: nil)
+    // MARK: Initialization
+    init(viewModel: CategoryListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: Outlets
@@ -97,48 +87,63 @@ final class CategoryListViewController: UIViewController {
         navigationItem.hidesBackButton = true
         setView()
         showStub()
-        delegate?.categoryList = categoryList
+        bind()
+    }
+    
+    // MARK: Actions
+    @objc func addCategoryButtonClicked() {
+        let viewController = NewCategoryViewController()
+        viewController.delegate = viewModel.self
+        viewController.modalPresentationStyle = .formSheet
+        present(viewController, animated: true, completion: nil)
     }
     
     // MARK: Private Methods
+    private func bind() {
+        viewModel.didChange = { [weak self] in
+            self?.updateView()
+        }
+    }
+    
     private func updateView() {
-        let indexPath = IndexPath(row: categoryList.endIndex - 1, section: 0)
+        let indexPath = IndexPath(row: viewModel.categoryList.endIndex - 1, section: 0)
         showStub()
         // Пересчет высоты таблицы
-        tableViewHeightConstraint.constant = CGFloat(self.categoryList.count) * self.cellHeight
+        tableViewHeightConstraint.constant = CGFloat(self.viewModel.categoryList.count) * self.cellHeight
         // Вставить добавленную ячейку
         updateTableViewAnimated(indexPath: [indexPath])
         tableView.reloadData()
     }
     
     private func showStub() {
-        stackView.isHidden = categoryList.isEmpty == false ? true : false
+        stackView.isHidden = viewModel.categoryList.isEmpty == false ? true : false
     }
 }
 
 // MARK: - NewCategoryProtocolDelegate
-extension CategoryListViewController: NewCategoryProtocolDelegate {
-    func addNewCategory(categoryName: String) {
-        categoryList.append(categoryName)
-        updateView()
-    }
-}
+//extension CategoryListViewController: NewCategoryProtocolDelegate {
+//    func addNewCategory(categoryName: String) {
+//        print("\(#function):\(#line) — Делегат 2")
+//        viewModel.categoryList.append(categoryName)
+//        updateView()
+//    }
+//}
 
 // MARK: - UITableViewDataSource
 extension CategoryListViewController: UITableViewDataSource {
     // Количество строк
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoryList.count
+        return viewModel.categoryList.count
     }
     
     // Ячейка
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? CategoryCell else { return UITableViewCell() }
-        cell.textLabel?.text = categoryList[indexPath.row]
+        cell.textLabel?.text = viewModel.categoryList[indexPath.row]
         cell.configCell(indexPath: indexPath)
         
         // Установка сепаратора для последней ячейки
-        if indexPath.row == categoryList.count - 1 {
+        if indexPath.row == viewModel.categoryList.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: tableView.bounds.width)
         } else {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
@@ -169,7 +174,8 @@ extension CategoryListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) {
             cell.setSelected(true, animated: true)
-            delegate?.setCategory(category: categoryList[indexPath.row])
+            viewModel.setCategory(index: indexPath.row)
+            //delegate?.setCategory(category: viewModel.categoryList[indexPath.row])
             self.dismiss(animated: true, completion: nil)
         }
     }
@@ -203,7 +209,7 @@ extension CategoryListViewController {
         ])
         
         view.addSubview(tableView)
-        let tableHeight = CGFloat(categoryList.count) * cellHeight
+        let tableHeight = CGFloat(viewModel.categoryList.count) * cellHeight
         tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: tableHeight)
         tableViewHeightConstraint.isActive = true
         NSLayoutConstraint.activate([
