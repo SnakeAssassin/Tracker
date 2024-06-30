@@ -42,6 +42,7 @@ final class OnboardingViewController: UIPageViewController {
             print("[OnboardingViewController/onboardingButtonClicked()]: Window Invalid Configuration")
             return
         }
+        UserDefaults.standard.set(true, forKey: "hasLaunchedBefore")
         let tabBarController = TabBarController()
         window.rootViewController = tabBarController
     }
