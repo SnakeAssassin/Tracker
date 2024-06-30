@@ -1,8 +1,6 @@
-//
-//  String.swift
-//  Tracker
-//
-//  Created by Joe Kramer on 29.06.2024.
-//
-
 import Foundation
+extension String {
+    static func localized(_ key: String) -> String {
+        return NSLocalizedString(key, comment: "\(key)")
+    }
+}

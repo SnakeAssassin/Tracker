@@ -16,7 +16,7 @@ final class AddTrackerViewController: UIViewController {
     // MARK: Private Properties
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Создание трекера"
+        label.text = String.localized("addTraсker.title.label")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textColor = .ypBlack
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -26,7 +26,7 @@ final class AddTrackerViewController: UIViewController {
         let button = UIButton()
         button.accessibilityIdentifier = "habitButton"
         button.backgroundColor = .ypBlack
-        button.setTitle("Привычка", for: .normal)
+        button.setTitle(String.localized("addTraсker.habbit.button"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = 16
@@ -40,7 +40,7 @@ final class AddTrackerViewController: UIViewController {
         let button = UIButton()
         button.accessibilityIdentifier = "eventButton"
         button.backgroundColor = .ypBlack
-        button.setTitle("Нерегулярное событие", for: .normal)
+        button.setTitle(String.localized("addTraсker.event.button"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = 16
@@ -64,7 +64,7 @@ final class AddTrackerViewController: UIViewController {
     @objc func habbitButtonClicked() {
         let viewController = NewTrackerViewController()
         viewController.delegate = self
-        viewController.configViewController("Новая привычка", ["Категория", "Расписание"])
+        viewController.configViewController(title: String.localized("newTraсker.habbit.title"), sections: [String.localized("newTraсker.habbit.section1"), String.localized("newTraсker.habbit.section2")])
         viewController.modalPresentationStyle = .formSheet
         present(viewController, animated: true, completion: nil)
     }
@@ -72,7 +72,7 @@ final class AddTrackerViewController: UIViewController {
     @objc func eventButtonClicked() {
         let viewController = NewTrackerViewController()
         viewController.delegate = self
-        viewController.configViewController("Новое нерегулярное событие", ["Категория"])
+        viewController.configViewController(title: String.localized("newTraсker.event.title"), sections: [String.localized("newTraсker.event.section1")])
         viewController.modalPresentationStyle = .formSheet
         present(viewController, animated: true, completion: nil)
     }

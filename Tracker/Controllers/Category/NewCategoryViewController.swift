@@ -16,14 +16,14 @@ final class NewCategoryViewController: UIViewController {
     private let maxLengthTextField = 38
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Новая категория"
+        label.text = String.localized("newCategory.title.label")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textColor = .ypBlack
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     private lazy var textField: RegisterTextField = {
-        let textField = RegisterTextField(placeholder: "Введите название категории")
+        let textField = RegisterTextField(placeholder: String.localized("newCategory.textField"))
         textField.delegate = self
         textField.rightView = textFieldButton
         textField.rightViewMode = .whileEditing
@@ -41,7 +41,7 @@ final class NewCategoryViewController: UIViewController {
     }()
     private lazy var warningLabel: UILabel = {
         let label = UILabel()
-        label.text = "Ограничение \(maxLengthTextField) символов"
+        label.text = String.localized("newCategory.warning.label")
         label.textColor = .ypRed
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.isHidden = true
@@ -53,7 +53,7 @@ final class NewCategoryViewController: UIViewController {
         button.accessibilityIdentifier = "createCategoryButton"
         button.isEnabled = false
         button.backgroundColor = .ypGray
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(String.localized("newCategory.done.button"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = 16

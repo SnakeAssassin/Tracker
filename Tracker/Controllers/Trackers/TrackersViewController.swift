@@ -47,18 +47,10 @@ final class TrackersViewController: UIViewController, UISearchBarDelegate {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
-        datePicker.locale = Locale(identifier: "ru_RU")
+        datePicker.locale = .current /*Locale(identifier: "ru_RU")*/
         datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         return datePicker
-    }()
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Трекеры"
-        label.font = UIFont.systemFont(ofSize: 34, weight: .bold)
-        label.textColor = .ypBlack
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
     }()
     private lazy var addButton: UIButton = {
         let button = UIButton()
@@ -77,8 +69,8 @@ final class TrackersViewController: UIViewController, UISearchBarDelegate {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
-        searchController.searchBar.placeholder = "Поиск"
-        searchController.searchBar.setValue("Отмена", forKey: "cancelButtonText")
+        searchController.searchBar.placeholder = String.localized("traсkers.searchBar.placeholder")
+        searchController.searchBar.setValue(String.localized("traсkers.searchBar.button"), forKey: "cancelButtonText")
         return searchController
     }()
     private lazy var stubTrackersView: UIImageView = {
@@ -91,7 +83,7 @@ final class TrackersViewController: UIViewController, UISearchBarDelegate {
     }()
     private lazy var stubTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
+        label.text = String.localized("traсkers.stub.label")
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textColor = .ypBlack
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -167,7 +159,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     
     // Количество секций в коллекции
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return visibleCategories.count/*categories?.count ?? 0*/
+        return visibleCategories.count
     }
     
     // Количество ячеек в секции
@@ -210,7 +202,7 @@ extension TrackersViewController: UICollectionViewDataSource {
                 withReuseIdentifier: "header",
                 for: indexPath
             ) as? SupplementaryTrackersView else { return UICollectionReusableView() }
-            header.titleLabel.text = visibleCategories[indexPath.section].title/*categories?[indexPath.section].title*/
+            header.titleLabel.text = visibleCategories[indexPath.section].title
             return header
         } else { return UICollectionReusableView() }
     }
@@ -281,6 +273,7 @@ extension TrackersViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let searchText = searchController.searchBar.text ?? ""
         print(searchText)
+        
         // TODO: код для получения результатов поиска на основе searchText
     }
 }
@@ -293,6 +286,7 @@ extension TrackersViewController: AddTrackerViewControllerDelegate {
         showVisibleTrackers()
         if self.presentedViewController is AddTrackerViewController {
             dismiss(animated: true, completion: nil)
+            print("закрыть")
         }
     }
 }
@@ -321,7 +315,7 @@ extension TrackersViewController {
         else { return }
         topItem.setLeftBarButton(UIBarButtonItem(customView: addButton), animated: true)
         topItem.setRightBarButton(UIBarButtonItem(customView: datePicker), animated: true)
-        topItem.title = "Трекеры"
+        topItem.title = String.localized("traсkers.navigationBar.title")
         navigationBar.prefersLargeTitles = true
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false

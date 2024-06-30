@@ -1,7 +1,60 @@
-/* 
-  Localizable.strings
-  Tracker
+"onBoarding.label1" = "Отслеживайте только то, что хотите";
+"onBoarding.label2" = "Даже если это не литры воды и йога";
+"onBoarding.button" = "Вот это технологии!";
 
-  Created by Joe Kramer on 29.06.2024.
-  
-*/
+"oneDay" = "день";
+"fewDays" = "дня";
+"otherDays" = "дней";
+
+"Monday" = "Понедельник";
+"Tuesday" = "Вторник";
+"Wednesday" = "Среда";
+"Thursday" = "Четверг";
+"Friday" = "Пятница";
+"Saturday" = "Суббота";
+"Sunday" = "Воскресенье";
+"Mon" = "Пн";
+"Tue" = "Вт";
+"Wed" = "Ср";
+"Thu" = "Чт";
+"Fri" = "Пт";
+"Sat" = "Сб";
+"Sun" = "Вс";
+
+"traсkers.navigationBar.title" = "Трекеры";
+"traсkers.searchBar.placeholder" = "Поиск";
+"traсkers.searchBar.button" = "Отмена";
+"traсkers.stub.label" = "Что будем отслеживать?";
+
+"addTraсker.title.label" = "Создание трекера";
+"addTraсker.habbit.button" = "Привычка";
+"addTraсker.event.button" = "Нерегулярное событие";
+"newTraсker.habbit.title" = "Новая привычка";
+"newTraсker.habbit.section1" = "Категория";
+"newTraсker.habbit.section2" = "Расписание";
+"newTraсker.event.title" = "Новое нерегулярное событие";
+"newTraсker.event.section1" = "Категория";
+
+"newTraсker.textField" = "Введите название трекера";
+"newTracker.warning.label" = "Ограничение 38 символов";
+"newTracker.cancel.button" = "Отменить";
+"newTracker.create.button" = "Создать";
+"newTraсker.schedule.footer" = "Каждый день";
+"newTraсker.schedule.header1" = "Emoji";
+"newTraсker.schedule.header2" = "Цвет";
+
+"categoryList.title.label" = "Категория";
+"categoryList.text.label" = "Привычки и события можно\nобъединить по смыслу";
+"categoryList.add.button" = "Добавить категорию";
+
+"newCategory.title.label" = "Новая категория";
+"newCategory.textField" = "Введите название категории";
+"newCategory.warning.label" = "Ограничение 38 символов";
+"newCategory.done.button" = "Готово";
+
+"schedule.title.label" = "Расписание";
+"schedule.done.button" = "Готово";
+
+"tabBar1.title" = "Трекеры";
+"tabBar2.title" = "Статистика";
+

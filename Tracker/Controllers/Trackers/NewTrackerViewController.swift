@@ -26,7 +26,7 @@ final class NewTrackerViewController: UIViewController {
                                  "🥦", "🏓", "🥇", "🎸", "🏝️", "😪"]
     private let trackerColors = Array(0...17)
     private let maxLengthTextField = 38
-    private var sections = ["Категория", "Расписание"] // !
+    private var sections = [""]
     private let cellHeight: CGFloat = 75
     private let cellParams: GeometricParams = GeometricParams(cellCount: 18,
                                                               topInset: 24,
@@ -47,14 +47,14 @@ final class NewTrackerViewController: UIViewController {
     }()
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Новая привычка"   // !
+        //label.text = "Новая привычка"   // !
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textColor = .ypBlack
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     private lazy var textField: RegisterTextField = {
-        let textField = RegisterTextField(placeholder: "Введите название трекера")
+        let textField = RegisterTextField(placeholder: String.localized("newTraсker.textField"))
         textField.delegate = self
         textField.rightView = textFieldButton
         textField.rightViewMode = .whileEditing
@@ -72,7 +72,7 @@ final class NewTrackerViewController: UIViewController {
     }()
     private lazy var warningLabel: UILabel = {
         let label = UILabel()
-        label.text = "Ограничение 38 символов"
+        label.text = String.localized("newTracker.warning.label")
         label.textColor = .ypRed
         label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         label.isHidden = true
@@ -94,7 +94,7 @@ final class NewTrackerViewController: UIViewController {
     private lazy var cancelButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .ypWhite
-        button.setTitle("Отменить", for: .normal)
+        button.setTitle(String.localized("newTracker.cancel.button"), for: .normal)
         button.setTitleColor(.ypRed, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.borderWidth = 1.0
@@ -109,7 +109,7 @@ final class NewTrackerViewController: UIViewController {
     private lazy var createButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .ypGray
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(String.localized("newTracker.create.button"), for: .normal)
         button.setTitleColor(.ypWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
@@ -181,7 +181,7 @@ final class NewTrackerViewController: UIViewController {
     }
     
     // MARK: Public methods
-    func configViewController(_ title: String, _ sections: [String]) {
+    func configViewController(title: String, sections: [String]) {
         self.titleLabel.text = title
         self.sections = sections
         if sections.count == 1 {
@@ -273,9 +273,9 @@ extension NewTrackerViewController: UITableViewDataSource {
         if indexPath.row == 1, let schedule = self.schedule {
             let scheduleFooter: String
             if schedule.count == 7 {
-                scheduleFooter = "Каждый день"
+                scheduleFooter = String.localized("newTraсker.schedule.footer")
             } else {
-                let text = schedule.compactMap { $0.shortDayName }.joined(separator: ", ")
+                let text = schedule.compactMap {String.localized($0.shortDayName)  }.joined(separator: ", ")
                 scheduleFooter = text.isEmpty ? "" : text
             }
             cell.detailTextLabel?.text = scheduleFooter
@@ -375,9 +375,9 @@ extension NewTrackerViewController: UICollectionViewDataSource {
         if kind == UICollectionView.elementKindSectionHeader {
             let section = indexPath.section
             if section == 0 {
-                view.titleLabel.text = "Emoji"
+                view.titleLabel.text = String.localized("newTraсker.schedule.header1")
             } else if section == 1 {
-                view.titleLabel.text = "Цвет"
+                view.titleLabel.text = String.localized("newTraсker.schedule.header2")
             }
         }
         view.titleLabel.font = UIFont.systemFont(ofSize: 19, weight: .bold)

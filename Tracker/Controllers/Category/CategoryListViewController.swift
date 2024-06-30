@@ -9,7 +9,7 @@ final class CategoryListViewController: UIViewController {
     private var tableViewHeightConstraint: NSLayoutConstraint!
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Категория"
+        label.text = String.localized("categoryList.title.label")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textColor = .ypBlack
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -27,7 +27,7 @@ final class CategoryListViewController: UIViewController {
     private lazy var textLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 2
-        label.text = "Привычки и события можно\nобъединить по смыслу"
+        label.text = String.localized("categoryList.text.label")
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textColor = .ypBlack
@@ -57,7 +57,7 @@ final class CategoryListViewController: UIViewController {
         let button = UIButton()
         button.accessibilityIdentifier = "addCategoryButton"
         button.backgroundColor = .ypBlack
-        button.setTitle("Добавить категорию", for: .normal)
+        button.setTitle(String.localized("categoryList.add.button"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = 16
@@ -119,15 +119,6 @@ final class CategoryListViewController: UIViewController {
         stackView.isHidden = viewModel.categoryList.isEmpty == false ? true : false
     }
 }
-
-// MARK: - NewCategoryProtocolDelegate
-//extension CategoryListViewController: NewCategoryProtocolDelegate {
-//    func addNewCategory(categoryName: String) {
-//        print("\(#function):\(#line) — Делегат 2")
-//        viewModel.categoryList.append(categoryName)
-//        updateView()
-//    }
-//}
 
 // MARK: - UITableViewDataSource
 extension CategoryListViewController: UITableViewDataSource {

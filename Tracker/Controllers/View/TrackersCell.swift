@@ -2,11 +2,7 @@ import UIKit
 
 protocol TrackerCellDelegate: AnyObject{
     func completedTracker(id: UUID, indexPath: IndexPath)
-    //func uncompletedTracker(id: UUID, indexPath: IndexPath)
 }
-
-// Класс ячейки должен наследоваться от `UICollectionViewCell`.
-// Ключевое слово final позволяет немного ускорить компиляцию и гарантирует, что от класса не будет никаких наследников.
 
 // MARK: - Ячейка ColorCell
 final class TrackersCell: UICollectionViewCell {
@@ -39,7 +35,6 @@ final class TrackersCell: UICollectionViewCell {
     
     private lazy var emojiLabel: UILabel = {
         let label = UILabel()
-        //label.text = ""
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textAlignment = .right
         label.baselineAdjustment = .alignCenters
@@ -49,7 +44,6 @@ final class TrackersCell: UICollectionViewCell {
     
     private lazy var trackerNameLabel: UILabel = {
         let label = UILabel()
-        //label.text = ""
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textColor = .ypWhite
         label.numberOfLines = 2
@@ -61,7 +55,6 @@ final class TrackersCell: UICollectionViewCell {
 
     private lazy var counterLabel: UILabel = {
         let label = UILabel()
-        //label.text = ""
         label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         label.textColor = .ypBlack
         label.textAlignment = .left
@@ -70,7 +63,7 @@ final class TrackersCell: UICollectionViewCell {
     }()
     
     private lazy var doneButton: UIButton = {
-        let button = UIButton(/*frame: CGRect(x: 100, y: 100, width: 34, height: 34)*/)
+        let button = UIButton()
         button.tintColor = .ypWhite
         button.addTarget(self, action: #selector(switchValueChanged(_:)), for: .touchUpInside)
         button.layer.cornerRadius = 17
@@ -84,7 +77,6 @@ final class TrackersCell: UICollectionViewCell {
         delegate?.completedTracker(id: trackerId, indexPath: indexPath)
     }
     
-    // Конструктор:
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
@@ -173,7 +165,6 @@ extension TrackersCell {
         
         let image = isCompletedToday ? UIImage(systemName: "checkmark") : UIImage(systemName: "plus")
         if isCompletedToday {
-            // Установка полупрозрачного цвета фона кнопки
             doneButton.backgroundColor = doneButton.backgroundColor?.withAlphaComponent(0.3)
         }
         doneButton.setImage(image, for: .normal)
@@ -183,13 +174,13 @@ extension TrackersCell {
         let suffix: String
         
         if daysCount % 10 == 1 && daysCount % 100 != 11 {
-            suffix = "день"
+            suffix = String.localized("oneDay")
         } else if (daysCount % 10 == 2 && daysCount % 100 != 12) ||
                     (daysCount % 10 == 3 && daysCount % 100 != 13) ||
                     (daysCount % 10 == 4 && daysCount % 100 != 14) {
-            suffix = "дня"
+            suffix = String.localized("fewDays")
         } else {
-            suffix = "дней"
+            suffix = String.localized("otherDays")
         }
         return "\(daysCount) \(suffix)"
     }

@@ -6,8 +6,8 @@ final class OnboardingViewController: UIPageViewController {
     // MARK: Public properties
     lazy var pages: [UIViewController] = {
         return [
-            self.viewController(imageNamed: "onboard1", textLabel: "Отслеживайте только то, что хотите"),
-            self.viewController(imageNamed: "onboard2", textLabel: "Даже если это не литры воды и йога")
+            self.viewController(imageNamed: "onboard1", textLabel: String.localized("onBoarding.label1")),
+            self.viewController(imageNamed: "onboard2", textLabel: String.localized("onBoarding.label2"))
         ]
     }()
     
@@ -79,7 +79,7 @@ final class OnboardingViewController: UIPageViewController {
         let button = UIButton()
         button.accessibilityIdentifier = "onboardingButton"
         button.backgroundColor = .black
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(String.localized("onBoarding.button"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 16

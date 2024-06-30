@@ -20,7 +20,7 @@ final class ScheduleViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Расписание"
+        label.text = String.localized("schedule.title.label")
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textColor = .ypBlack
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +41,7 @@ final class ScheduleViewController: UIViewController {
     private lazy var okButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .ypBlack
-        button.setTitle("Готово", for: .normal)
+        button.setTitle(String.localized("schedule.done.button"), for: .normal)
         button.setTitleColor(.ypWhite, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.layer.cornerRadius = 16
@@ -80,7 +80,7 @@ extension ScheduleViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? ScheduleCell else { return  UITableViewCell() }
         cell.accessoryView = cell.scheduleSwitch
         cell.backgroundColor = .ypBackground
-        cell.textLabel?.text = weekdays[indexPath.row].rawValue
+        cell.textLabel?.text = String.localized(weekdays[indexPath.row].rawValue)
         cell.configCell(indexPath: indexPath)
         cell.delegate = self
         

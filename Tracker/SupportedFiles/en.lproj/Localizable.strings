@@ -1,7 +1,61 @@
-/* 
-  Localizable.strings
-  Tracker
+"onBoarding.label1" = "Only track what you want";
+"onBoarding.label2" = "Even if it's not liters of water and yoga";
+"onBoarding.button" = "What a technology!";
 
-  Created by Joe Kramer on 29.06.2024.
-  
-*/
+"oneDay" = "day";
+"fewDays" = "days";
+"otherDays" = "days";
+
+
+"Monday" = "Monday";
+"Tuesday" = "Tuesday";
+"Wednesday" = "Wednesday";
+"Thursday" = "Thursday";
+"Friday" = "Friday";
+"Saturday" = "Saturday";
+"Sunday" = "Sunday";
+"Mon" = "Mon";
+"Tue" = "Tue";
+"Wed" = "Wed";
+"Thu" = "Thu";
+"Fri" = "Fri";
+"Sat" = "Sat";
+"Sun" = "Sun";
+
+//"trackers.navigationBar.title" = "Trackers";
+"traсkers.navigationBar.title" = "Trackers";
+"traсkers.searchBar.placeholder" = "Search";
+"traсkers.searchBar.button" = "Cancel";
+"traсkers.stub.label" = "What will we monitor?";
+
+"addTraсker.title.label" = "Creating a tracker";
+"addTraсker.habbit.button" = "Habit";
+"addTraсker.event.button" = "Irregular event";
+"newTraсker.habbit.title" = "New Habit";
+"newTraсker.habbit.section1" = "Category";
+"newTraсker.habbit.section2" = "Schedule";
+"newTraсker.event.title" = "New irregular event";
+"newTraсker.event.section1" = "Category";
+
+"newTraсker.textField" = "Enter the name of the tracker";
+"newTracker.warning.label" = "38 character limit";
+"newTracker.cancel.button" = "Cancel";
+"newTracker.create.button" = "Create";
+"newTraсker.schedule.footer" = "Every day";
+"newTraсker.schedule.header1" = "Emoji";
+"newTraсker.schedule.header2" = "Color";
+
+"categoryList.title.label" = "Category";
+"categoryList.text.label" = "Habits and events can\nbe combined by meaning";
+"categoryList.add.button" = "Add parameter";
+
+"newCategory.title.label" = "New Category";
+"newCategory.textField" = "Enter a category name";
+"newCategory.warning.label" = "38 character limit";
+"newCategory.done.button" = "Done";
+
+"schedule.title.label" = "Schedule";
+"schedule.done.button" = "Done";
+
+"tabBar1.title" = "Trackers";
+"tabBar2.title" = "Statistics";
