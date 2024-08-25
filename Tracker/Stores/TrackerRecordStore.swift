@@ -5,18 +5,13 @@ final class TrackerRecordStore: NSObject {
     
     // MARK: Properties
     private let context: NSManagedObjectContext
+    private var fetchedResultsController: NSFetchedResultsController<TrackerRecordCoreData>!
     
     // MARK: Initialization
     convenience override init() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-                fatalError("Unable to cast delegate to AppDelegate")
-            }
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
-        do {
-                try self.init(context: context)
-            } catch {
-                fatalError("Unable to initialize object: \(error.localizedDescription)")
-            }
+        try! self.init(context: context)
     }
     
     init(context: NSManagedObjectContext) throws {
@@ -24,13 +19,19 @@ final class TrackerRecordStore: NSObject {
         super.init()
     }
     
-    // MARK: Public Methods
-    
-    // Получение завершенных дней для трекера
-    func completedDays(for id: UUID) throws -> [Date] {
-        return try fetchDays(for: id)
+    // MARK: Private Function
+    private func fetchTracker(id: UUID) throws -> TrackerCoreData? {
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        do {
+            let result = try context.fetch(fetchRequest)
+            return result.first
+        } catch {
+            throw error
+        }
     }
     
+    // MARK: Public Function
     func fetchDays(for id: UUID) throws -> [Date] {
         let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
@@ -39,21 +40,21 @@ final class TrackerRecordStore: NSObject {
         return dates
     }
     
-    // Добавление или удаление записи
     func addOrDeleteRecord(id: UUID, date: Date) throws {
         if let existingRecord = try fetchRecord(id: id, date: date) {
             context.delete(existingRecord)
         } else {
-            if date <= Date() {
+            if date <= Date().dateWithoutTime() {
+                guard let tracker = try fetchTracker(id: id) else { return }
                 let newRecord = TrackerRecordCoreData(context: context)
                 newRecord.id = id
                 newRecord.date = date
+                newRecord.tracker = tracker
             }
         }
         try context.save()
     }
     
-    // Получение TrackerRecord по id и date:
     func fetchRecord(id: UUID, date: Date) throws -> TrackerRecordCoreData? {
         let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@ AND date == %@", id as CVarArg, date as CVarArg)
@@ -65,8 +66,36 @@ final class TrackerRecordStore: NSObject {
         }
     }
     
-    // Удаление TrackerRecord из CoreData
-    func deleteTrackerRecordsFromCoreData() throws { // TODO: - delete in Sprint 16
+    func fetchMinDate() throws -> Date? {
+        let fetchRequest: NSFetchRequest<TrackerRecordCoreData> = TrackerRecordCoreData.fetchRequest()
+        fetchRequest.fetchLimit = 1
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
+        do {
+            let result = try context.fetch(fetchRequest)
+            return result.first?.date
+        } catch {
+            throw error
+        }
+    }
+    
+    func fetchAllTrackers() throws -> [TrackerForStatistics] {
+        var trackers: [TrackerForStatistics] = []
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        let result = try context.fetch(fetchRequest)
+        for object in result {
+            let tracker = TrackerForStatistics(
+                id: object.id ?? UUID(),
+                schedule: object.schedule?.components(separatedBy: ",").compactMap { Weekdays(rawValue: $0) } ?? [],
+                dateEvent: object.eventDate,
+                completedAt: object.record?.compactMap { ($0 as? TrackerRecordCoreData)?.date} ?? []
+            )
+            trackers.append(tracker)
+        }
+        return trackers
+    }
+    
+    func deleteTrackerRecordsFromCoreData() throws {
         print(#fileID, #function)
         let request = TrackerRecordCoreData.fetchRequest()
         let records = try? context.fetch(request)

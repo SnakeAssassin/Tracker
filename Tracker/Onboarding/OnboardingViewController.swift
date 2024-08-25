@@ -6,8 +6,8 @@ final class OnboardingViewController: UIPageViewController {
     // MARK: Public properties
     lazy var pages: [UIViewController] = {
         return [
-            self.viewController(imageNamed: "onboard1", textLabel: "Отслеживайте только то, что хотите"),
-            self.viewController(imageNamed: "onboard2", textLabel: "Даже если это не литры воды и йога")
+            self.viewController(imageNamed: "onboard1", textLabel: String.localized("onBoarding.label1")),
+            self.viewController(imageNamed: "onboard2", textLabel: String.localized("onBoarding.label2"))
         ]
     }()
     
@@ -42,6 +42,7 @@ final class OnboardingViewController: UIPageViewController {
             print("[OnboardingViewController/onboardingButtonClicked()]: Window Invalid Configuration")
             return
         }
+        UserDefaults.standard.set(true, forKey: "hasLaunchedBefore")
         let tabBarController = TabBarController()
         window.rootViewController = tabBarController
     }
@@ -79,7 +80,7 @@ final class OnboardingViewController: UIPageViewController {
         let button = UIButton()
         button.accessibilityIdentifier = "onboardingButton"
         button.backgroundColor = .black
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(String.localized("onBoarding.button"), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 16
@@ -141,7 +142,6 @@ extension OnboardingViewController: UIPageViewControllerDataSource {
 
 // MARK: - UIPageViewControllerDelegate
 extension OnboardingViewController: UIPageViewControllerDelegate {
-    // Переключаем индикатор текущей страницы через делегат
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if let currentViewController = pageViewController.viewControllers?.first,
            let currentIndex = pages.firstIndex(of: currentViewController) {
@@ -149,5 +149,3 @@ extension OnboardingViewController: UIPageViewControllerDelegate {
         }
     }
 }
-
-

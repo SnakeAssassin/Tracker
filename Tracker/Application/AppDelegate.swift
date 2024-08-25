@@ -10,11 +10,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      didFinishLaunchingWithOptions launchOptions:
                      [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        //window = UIWindow()
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = MainViewController()
         window?.makeKeyAndVisible()
-        DaysValueTransformer.register()
+        AnalyticsService.activate()
+        //UserDefaults.standard.set(true, forKey: "com.apple.CoreData.SQLDebug")
         //clearUserDefaults()   // сброс UserDefaults при запуске приложения
         return true
     }
