@@ -33,7 +33,6 @@ final class TrackersViewController: UIViewController {
     private var completedFilter: Bool?
     private var trackersIsEmpty: Bool = true {
         didSet {
-            print("3) trackersIsEmpty изменен")
             conditionStubs()
         }
     }
@@ -141,8 +140,6 @@ final class TrackersViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
         
-        print("@ 1) view did load, visibleCatregories: \(visibleCategories)")
-        print("@ 2) visibleCategories пустой: \(visibleCategories.isEmpty)")
         trackersIsEmpty = visibleCategories.isEmpty
         viewModel.categoriesBinding = { [weak self] _ in
             guard let self = self else { return }
@@ -172,14 +169,10 @@ final class TrackersViewController: UIViewController {
     // MARK: Private Function
     
     private func conditionStubs() {
-        print("@ 4) вызов conditionStubs()")
-        print("trackersIsEmpty: \(trackersIsEmpty)")
         if trackersIsEmpty {
-            print("@ 5) трекер пустой")
             trackersCollectionView.isHidden = true
             filterButton.isHidden = true
         } else {
-            print("@ 5) трекер не пустой")
             trackersCollectionView.isHidden = false
             filterButton.isHidden = false
         }
