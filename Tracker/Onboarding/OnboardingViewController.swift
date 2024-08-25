@@ -142,7 +142,6 @@ extension OnboardingViewController: UIPageViewControllerDataSource {
 
 // MARK: - UIPageViewControllerDelegate
 extension OnboardingViewController: UIPageViewControllerDelegate {
-    // Переключаем индикатор текущей страницы через делегат
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if let currentViewController = pageViewController.viewControllers?.first,
            let currentIndex = pages.firstIndex(of: currentViewController) {
@@ -150,5 +149,3 @@ extension OnboardingViewController: UIPageViewControllerDelegate {
         }
     }
 }
-
-

@@ -25,11 +25,20 @@
 "traсkers.searchBar.placeholder" = "Поиск";
 "traсkers.searchBar.button" = "Отмена";
 "traсkers.stub.label" = "Что будем отслеживать?";
+"traсkers.notFound.label" = "Ничего не найдено";
+"traсkers.buttonFilters.title" = "Фильтры";
+"traсkers.delete.confirmation" = "Уверены что хотите удалить трекер?";
+"traсkers.delete" = "Удалить";
+"traсkers.cancel" = "Отменить";
+"traсkers.edit" = "Редактировать";
+"traсkers.pin" = "Закрепить";
+"traсkers.unpin" = "Открепить";
 
 "addTraсker.title.label" = "Создание трекера";
 "addTraсker.habbit.button" = "Привычка";
 "addTraсker.event.button" = "Нерегулярное событие";
 "newTraсker.habbit.title" = "Новая привычка";
+"newTraсker.editingCategory.title" = "Редактирование категории";
 "newTraсker.habbit.section1" = "Категория";
 "newTraсker.habbit.section2" = "Расписание";
 "newTraсker.event.title" = "Новое нерегулярное событие";
@@ -44,13 +53,17 @@
 "newTraсker.schedule.header2" = "Цвет";
 
 "categoryList.title.label" = "Категория";
-"categoryList.text.label" = "Привычки и события можно\nобъединить по смыслу";
+"categoryList.text.label" = "Привычки и события можно объединить по смыслу";
 "categoryList.add.button" = "Добавить категорию";
+"categoryList.delete.confirmation" = "Эта категория точно не нужна?";
 
 "newCategory.title.label" = "Новая категория";
 "newCategory.textField" = "Введите название категории";
 "newCategory.warning.label" = "Ограничение 38 символов";
 "newCategory.done.button" = "Готово";
+
+"editingCategory.title" = "Редактирование категории";
+"editingCategory.readyButton.Title" = "Готово";
 
 "schedule.title.label" = "Расписание";
 "schedule.done.button" = "Готово";
@@ -58,3 +71,13 @@
 "tabBar1.title" = "Трекеры";
 "tabBar2.title" = "Статистика";
 
+"allTrackers" = "Все трекеры";
+"todayTrackers" = "Трекеры на сегодня";
+"completedTrackers" = "Завершенные";
+"unCompletedTrackers" = "Не завершенные";
+
+"statisticsStubLabel.text" = "Анализировать пока нечего";
+"bestPeriodTextLabel" = "Лучший период";
+"idealDaysTextLabel" = "Идеальные дни";
+"trackersCompletedTextLabel" = "Трекеров завершено";
+"averageValueTextLabel" = "Среднее значениe";
