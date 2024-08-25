@@ -1,65 +1,65 @@
 enum Weekdays: String, CaseIterable, Codable {
-    case Monday = "Monday"
-    case Tuesday = "Tuesday"
-    case Wednesday = "Wednesday"
-    case Thursday = "Thursday"
-    case Friday = "Friday"
-    case Saturday = "Saturday"
-    case Sunday = "Sunday"
+    case monday = "Monday"
+    case tuesday = "Tuesday"
+    case wednesday = "Wednesday"
+    case thursday = "Thursday"
+    case friday = "Friday"
+    case saturday = "Saturday"
+    case sunday = "Sunday"
     
     var numberValue: Int {
         switch self {
-        case .Monday:
+        case .monday:
             return 2
-        case .Tuesday:
+        case .tuesday:
             return 3
-        case .Wednesday:
+        case .wednesday:
             return 4
-        case .Thursday:
+        case .thursday:
             return 5
-        case .Friday:
+        case .friday:
             return 6
-        case .Saturday:
+        case .saturday:
             return 7
-        case .Sunday:
+        case .sunday:
             return 1
         }
     }
     
     var shortDayName: String {
         switch self {
-        case .Monday:
+        case .monday:
             return "Mon"
-        case .Tuesday:
+        case .tuesday:
             return "Tue"
-        case .Wednesday:
+        case .wednesday:
             return "Wed"
-        case .Thursday:
+        case .thursday:
             return "Thu"
-        case .Friday:
+        case .friday:
             return "Fri"
-        case .Saturday:
+        case .saturday:
             return "Sat"
-        case .Sunday:
+        case .sunday:
             return "Sun"
         }
     }
     
     var numberValueRus: Int {
         switch self {
-        case .Monday:
+        case .monday:
             return 1
-        case .Tuesday:
+        case .tuesday:
             return 2
-        case .Wednesday:
+        case .wednesday:
             return 3
-        case .Thursday:
+        case .thursday:
             return 4
-        case .Friday:
+        case .friday:
             return 5
-        case .Saturday:
+        case .saturday:
             return 6
-        case .Sunday:
+        case .sunday:
             return 7
         }
     }

@@ -12,6 +12,7 @@ final class CategoryListViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
     private lazy var listTableView: UITableView = {
         let tableView = UITableView()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -22,12 +23,14 @@ final class CategoryListViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
+    
     private lazy var stubImageView: UIImageView = {
         let image = UIImage(named: "Stub trackers")
         let imageView = UIImageView(image: image)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
+    
     private lazy var stubLabel: UILabel = {
         let label = UILabel()
         label.text = String.localized("categoryList.text.label")
@@ -38,6 +41,7 @@ final class CategoryListViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
     private lazy var addCategoryButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .ypBlack
@@ -119,15 +123,10 @@ final class CategoryListViewController: UIViewController {
     }
     
     private func conditionStubs() {
-        if viewModel.conditionStubs() {
-            listTableView.isHidden = true
-            stubLabel.isHidden = false
-            stubImageView.isHidden = false
-        } else {
-            listTableView.isHidden = false
-            stubLabel.isHidden = true
-            stubImageView.isHidden = true
-        }
+        let isContainCategories = viewModel.conditionStubs()
+        listTableView.isHidden = isContainCategories
+        stubLabel.isHidden = !isContainCategories
+        stubImageView.isHidden = !isContainCategories
     }
     
     private func createSeparatorImageView(cell: UITableViewCell) {
@@ -151,6 +150,29 @@ final class CategoryListViewController: UIViewController {
         listTableView.heightAnchor.constraint(equalToConstant: CGFloat(viewModel.categoriesArray.count * 75)).isActive = true
         listTableView.reloadData()
         view.layoutIfNeeded()
+    }
+    
+    private func showAlert(for indexPath: IndexPath, in tableView: UITableView) {
+        let alert = UIAlertController(title: nil, message: String.localized("traсkers.delete.confirmation"), preferredStyle: .actionSheet)
+        
+        let deleteAction = UIAlertAction(title: String.localized("traсkers.delete"), style: .destructive) { [weak self] _ in
+            guard let self = self else { return }
+            self.viewModel.deleteCategory(at: indexPath)
+            for visibleIndexPath in tableView.indexPathsForVisibleRows ?? [] {
+                if visibleIndexPath != indexPath {
+                    tableView.cellForRow(at: visibleIndexPath)?.accessoryView = nil
+                }
+            }
+            self.conditionStubs()
+            self.updateTableView()
+        }
+        
+        let cancelAction = UIAlertAction(title: String.localized("traсkers.cancel"), style: .cancel, handler: nil)
+        
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true, completion: nil)
     }
     
     // MARK: - Actions
@@ -227,29 +249,10 @@ extension CategoryListViewController: UITableViewDelegate {
                 let navVC = UINavigationController(rootViewController: editingCategoryVC)
                 self.present(navVC, animated: true)
             }
+            
             let deleteAction = UIAction(title: String.localized("traсkers.delete"), image: nil, attributes: .destructive) { [weak self] _ in
                 guard let self = self else { return }
-                
-                let alert = UIAlertController(title: nil, message: String.localized("traсkers.delete.confirmation"), preferredStyle: .actionSheet)
-                let deleteAction = UIAlertAction(title: String.localized("traсkers.delete"), style: .destructive) { [weak self] _ in
-                    guard let self = self else { return }
-                    self.viewModel.deleteCategory(at: indexPath)
-                    for visibleIndexPath in tableView.indexPathsForVisibleRows ?? [] {
-                        if visibleIndexPath != indexPath {
-                            tableView.cellForRow(at: visibleIndexPath)?.accessoryView = nil
-                        }
-                    }
-                    self.conditionStubs()
-                    self.updateTableView()
-                }
-                
-                let cancelAction = UIAlertAction(title: String.localized("traсkers.cancel"), style: .cancel) { [weak self] _ in
-                    guard let self = self else { return }
-                    self.dismiss(animated: true)
-                }
-                alert.addAction(deleteAction)
-                alert.addAction(cancelAction)
-                present(alert, animated: true, completion: nil)
+                self.showAlert(for: indexPath, in: tableView)
             }
             return UIMenu(title: "", children: [editAction, deleteAction])
         }

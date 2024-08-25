@@ -33,6 +33,7 @@ final class TrackersViewController: UIViewController {
     private var completedFilter: Bool?
     private var trackersIsEmpty: Bool = true {
         didSet {
+            print("3) trackersIsEmpty изменен")
             conditionStubs()
         }
     }
@@ -139,10 +140,13 @@ final class TrackersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
+        
+        print("@ 1) view did load, visibleCatregories: \(visibleCategories)")
+        print("@ 2) visibleCategories пустой: \(visibleCategories.isEmpty)")
         trackersIsEmpty = visibleCategories.isEmpty
         viewModel.categoriesBinding = { [weak self] _ in
             guard let self = self else { return }
-            self.reloadPlaceholder()
+            self.updateUI()
             self.trackersCollectionView.reloadData()
         }
         trackersCollectionView.delegate = self
@@ -168,33 +172,55 @@ final class TrackersViewController: UIViewController {
     // MARK: Private Function
     
     private func conditionStubs() {
+        print("@ 4) вызов conditionStubs()")
+        print("trackersIsEmpty: \(trackersIsEmpty)")
         if trackersIsEmpty {
+            print("@ 5) трекер пустой")
             trackersCollectionView.isHidden = true
             filterButton.isHidden = true
-            stubLabel.isHidden = false
-            stubImageView.isHidden = false
         } else {
+            print("@ 5) трекер не пустой")
             trackersCollectionView.isHidden = false
             filterButton.isHidden = false
-            stubLabel.isHidden = true
-            stubImageView.isHidden = true
-            notFoundImageView.isHidden = true
-            notFoundLabel.isHidden = true
         }
+        updateUI()
     }
-    
-    private func reloadPlaceholder() {
-        if !trackersIsEmpty && visibleCategories.isEmpty {
-            notFoundImageView.isHidden = false
-            notFoundLabel.isHidden = false
-            stubLabel.isHidden = true
-            stubImageView.isHidden = true
-        } else {
-            notFoundImageView.isHidden = true
-            notFoundLabel.isHidden = true
-        }
+
+    private func updateUI() {
+        switch (visibleCategories.isEmpty, savedFilter) {
+            case (true, .allTrackers), (true, .todayTrackers):
+                showStubUI()
+            case (true, .completedTrackers), (true, .unCompletedTrackers) where !trackersIsEmpty:
+                showNotFoundUI()
+            case (false, _):
+                hideAllUI()
+
+            default:
+                break
+            }
         haveTrackersForToday = checkTrackersForToday()
         filterButton.isHidden = !haveTrackersForToday
+    }
+    
+    private func showStubUI() {
+        stubLabel.isHidden = false
+        stubImageView.isHidden = false
+        notFoundImageView.isHidden = true
+        notFoundLabel.isHidden = true
+    }
+
+    private func showNotFoundUI() {
+        stubLabel.isHidden = true
+        stubImageView.isHidden = true
+        notFoundImageView.isHidden = false
+        notFoundLabel.isHidden = false
+    }
+
+    private func hideAllUI() {
+        stubLabel.isHidden = true
+        stubImageView.isHidden = true
+        notFoundImageView.isHidden = true
+        notFoundLabel.isHidden = true
     }
     
     private func reloadData() {
@@ -329,7 +355,6 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
             let pinAction = UIAction(title: title, image: nil) { [weak self] _ in
                 guard let self = self else { return }
                 self.viewModel.togglePin(selectedTracker)
-                //self.reloadVisibleCategories(text: "", date: self.currentDate)
             }
             let editAction = UIAction(title: String.localized("traсkers.edit"), image: nil) { [weak self] _ in
                 guard let self = self else { return }
@@ -345,7 +370,8 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfiguration configuration: UIContextMenuConfiguration, highlightPreviewForItemAt indexPath: IndexPath) -> UITargetedPreview? {
         guard let cell = collectionView.cellForItem(at: indexPath) as? TrackersCell else { return nil }
-        let targetPreview = UITargetedPreview(view: cell.backView)
+        let uiView = cell.configCellView()
+        let targetPreview = UITargetedPreview(view: uiView)
         return targetPreview
     }
 }

@@ -98,21 +98,37 @@ extension FiltersViewController: UITableViewDataSource {
 // MARK: - Extension UITableViewDelegate
 extension FiltersViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let selectedFilter = selectedFilter, selectedFilter != filtersArray[indexPath.row] {
-            let lastIndexPath = filtersArray.firstIndex(of: selectedFilter)
-            tableView.cellForRow(at: IndexPath(row: lastIndexPath ?? 0, section: 0))?.accessoryView = nil
-            self.selectedFilter = filtersArray[indexPath.row]
-            let checkmarkImageView = UIImageView(image: UIImage(named: "checkmark"))
-            tableView.cellForRow(at: indexPath)?.accessoryView = checkmarkImageView
-            UserDefaults.standard.set(self.selectedFilter?.rawValue, forKey: "selectedFilter")
+        let selectedFilter = filtersArray[indexPath.row]
+        
+        if self.selectedFilter != selectedFilter {
+            updateAccessoryView(for: selectedFilter, in: tableView, at: indexPath)
+            saveSelectedFilter(selectedFilter)
         }
-        delegate?.useSelectedFilter(selectedFilter: self.selectedFilter ?? Filters.allTrackers)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.dismiss(animated: true, completion: nil)
-        }
+        delegate?.useSelectedFilter(selectedFilter: selectedFilter)
+        dismissViewWithDelay()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return CGFloat(75)
+    }
+    
+    private func updateAccessoryView(for filter: Filters, in tableView: UITableView, at indexPath: IndexPath) {
+        if let lastIndexPath = filtersArray.firstIndex(of: self.selectedFilter ?? Filters.allTrackers) {
+            tableView.cellForRow(at: IndexPath(row: lastIndexPath, section: 0))?.accessoryView = nil
+        }
+        
+        self.selectedFilter = filter
+        let checkmarkImageView = UIImageView(image: UIImage(named: "checkmark"))
+        tableView.cellForRow(at: indexPath)?.accessoryView = checkmarkImageView
+    }
+    
+    private func saveSelectedFilter(_ filter: Filters) {
+        UserDefaults.standard.set(filter.rawValue, forKey: "selectedFilter")
+    }
+    
+    private func dismissViewWithDelay() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 }

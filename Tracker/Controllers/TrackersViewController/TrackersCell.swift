@@ -13,7 +13,7 @@ final class TrackersCell: UICollectionViewCell {
     private var trackerId: UUID?
     private var indexPath: IndexPath?
     
-    lazy var backView: UIView = {
+    private lazy var backView: UIView = {
         let imageView = UIView()
         imageView.layer.cornerRadius = 16
         imageView.layer.masksToBounds = true
@@ -188,6 +188,10 @@ extension TrackersCell {
         doneButton.setImage(image, for: .normal)
         
         pinImageView.image = category == "Закрепленные" ? UIImage(named: "pin") : .none
+    }
+    
+    func configCellView() -> UIView {
+        return backView
     }
     
     private func formatDayLabel(daysCount: Int) -> String {
